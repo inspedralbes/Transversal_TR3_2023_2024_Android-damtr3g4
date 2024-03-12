@@ -1,7 +1,11 @@
 package objects;
 
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+
+import helpers.AssetManager;
 
 public class Peashooter extends Actor {
     // Diferents posicions de l'Spacecraft: recta, pujant i baixant
@@ -13,6 +17,7 @@ public class Peashooter extends Actor {
     private Vector2 position;
     private int width, height;
     private int direction;
+    private float stateTime;
 
     public Peashooter(float x, float y, int width, int height) {
 
@@ -27,7 +32,7 @@ public class Peashooter extends Actor {
     }
 
     public void act(float delta) {
-
+        stateTime += delta;
         // Movem l'Spacecraft depenent de la direcció controlant que no surti de la pantalla
         switch (direction) {
             case PEASHOOTER_DIE:
@@ -37,5 +42,15 @@ public class Peashooter extends Actor {
             case PEASHOOTER_STRAIGHT:
                 break;
         }
+    }
+
+    @Override
+    public void draw(Batch batch, float parentAlpha) {
+        super.draw(batch, parentAlpha);
+        // Obtener el fotograma actual de la animación
+        TextureRegion currentFrame = (TextureRegion) AssetManager.peashooterDefaultAnimated.getKeyFrame(stateTime, true);
+
+        // Dibujar el fotograma actual
+        batch.draw(currentFrame, position.x, position.y, width, height);
     }
 }
