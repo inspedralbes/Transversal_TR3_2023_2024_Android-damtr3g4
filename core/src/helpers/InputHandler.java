@@ -1,8 +1,21 @@
 package helpers;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.math.Vector2;
+
+import objects.Card;
+import screens.GameScreen;
 
 public class InputHandler implements InputProcessor {
+    private Card card;
+    private GameScreen gameScreen;
+
+    public InputHandler(GameScreen gameScreen){
+        this.gameScreen = gameScreen;
+        this.card = gameScreen.getCard();
+    }
+
     @Override
     public boolean keyDown(int keycode) {
         return false;
@@ -35,6 +48,7 @@ public class InputHandler implements InputProcessor {
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
+        card.setPosition(new Vector2(screenX, Gdx.graphics.getHeight() - screenY));
         return false;
     }
 

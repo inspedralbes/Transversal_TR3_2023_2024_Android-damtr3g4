@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 
 import helpers.AssetManager;
 import screens.GameScreen;
+import screens.MainScreen;
 
 public class plantsVsZombie extends Game {
 	public static final int WIDTH = 1000;
@@ -27,7 +28,7 @@ public class plantsVsZombie extends Game {
 		// A l'iniciar el joc carreguem els recursos
 		AssetManager.load();
 		// I definim la pantalla principal com a la pantalla
-		setScreen(new GameScreen(this));
+		setScreen(new MainScreen(this));
 
 	}
 
@@ -59,7 +60,7 @@ public class plantsVsZombie extends Game {
 	@Override
 	public void render() {
 		super.render();
- 		Gdx.app.log("LifeCycle", "render()");
+
 	}
 
 }

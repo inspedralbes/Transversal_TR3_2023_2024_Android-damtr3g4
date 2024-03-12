@@ -16,6 +16,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
 import helpers.AssetManager;
+import helpers.InputHandler;
+import objects.Card;
 import objects.Peashooter;
 import objects.ScrollHandler;
 import plants.vs.zombie.plantsVsZombie;
@@ -25,6 +27,7 @@ public class GameScreen implements Screen {
     private plantsVsZombie pVsZ;
     private SpriteBatch batch;
     private Peashooter peashooter;
+    private Card card;
     private OrthographicCamera camera;
     private Stage stage;
     private Table table;
@@ -51,11 +54,13 @@ public class GameScreen implements Screen {
 
         table.left().top();
 
-        // Creación del Peashooter y ajuste de su posición
-        peashooter = new Peashooter(100, 100, 46, 60);
-        stage.addActor(peashooter); // Agregar el Peashooter al Stage
+        peashooter = new Peashooter(240, 50, 46, 60);
+        card = new Card(200, 200, 128,224, 1);
+        stage.addActor(peashooter);
         table.setFillParent(true);
         stage.addActor(table);
+        stage.addActor(card);
+        Gdx.input.setInputProcessor(new InputHandler(this));
     }
     @Override
     public void show() {
@@ -69,9 +74,6 @@ public class GameScreen implements Screen {
         batch.end();
         stage.draw();
         stage.act(delta);
-
-
-
     }
 
 
@@ -106,4 +108,31 @@ public class GameScreen implements Screen {
         stage.dispose();
     }
 
+    public Card getCard() {
+        return card;
+    }
+
+    public plantsVsZombie getpVsZ() {
+        return pVsZ;
+    }
+
+    public SpriteBatch getBatch() {
+        return batch;
+    }
+
+    public Peashooter getPeashooter() {
+        return peashooter;
+    }
+
+    public OrthographicCamera getCamera() {
+        return camera;
+    }
+
+    public Stage getStage() {
+        return stage;
+    }
+
+    public Table getTable() {
+        return table;
+    }
 }
