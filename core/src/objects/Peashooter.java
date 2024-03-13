@@ -47,10 +47,7 @@ public class Peashooter extends Actor {
     @Override
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
-        // Obtener el fotograma actual de la animación
         TextureRegion currentFrame = (TextureRegion) AssetManager.peashooterDefaultAnimated.getKeyFrame(stateTime, true);
-
-        // Dibujar el fotograma actual
         batch.draw(currentFrame, position.x, position.y, width, height);
     }
 }
