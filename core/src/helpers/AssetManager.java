@@ -12,18 +12,30 @@ public class AssetManager {
     public static Texture peashooterTexture;
     public static TextureRegion[] peashooterDefaultMovement;
     public static Animation peashooterDefaultAnimated;
+    public static Texture sunflowerTexture;
+    public static TextureRegion[] sunflowerDefaultMovement;
+    public static Animation sunflowerDefaultAnimated;
     public static Skin skin;
     public static void load(){
         bgGameScreen = new Texture(Gdx.files.internal("bgGameScreen.png"));
         peashooterTexture = new Texture(Gdx.files.internal("peashooter.png"));
-        peashooterDefaultMovement = new TextureRegion[7];
-        for(int i = 0; i < 7; i++) {
+        peashooterDefaultMovement = new TextureRegion[8];
+        for(int i = 0; i < 8; i++) {
             peashooterDefaultMovement[i] = new TextureRegion(peashooterTexture, i * 27, 2, 26, 30);
         }
 
         skin = new Skin(Gdx.files.internal("uiskin.json"));
         // Crear la animación con las regiones de textura
-        peashooterDefaultAnimated = new Animation<>(0.05f, peashooterDefaultMovement);
+        peashooterDefaultAnimated = new Animation<>(0.15f, peashooterDefaultMovement);
+
+
+        sunflowerTexture = new Texture(Gdx.files.internal("sunflower.png"));
+        sunflowerDefaultMovement = new TextureRegion[6];
+        for (int i = 0; i < 6; i++){
+            sunflowerDefaultMovement[i] = new TextureRegion(sunflowerTexture, i*31, 38, 30, 32);
+        }
+
+        sunflowerDefaultAnimated = new Animation<>(0.15f, sunflowerDefaultMovement);
     }
 
     public static void dispose(){

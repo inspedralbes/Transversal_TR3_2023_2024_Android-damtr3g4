@@ -164,7 +164,8 @@ public class AuthenticationScreen implements Screen {
                     Gdx.app.postRunnable(() -> {
                         Gdx.app.log("CAMBIANDO", "ESTOY YENDO A MAIN SCREEN");
                         pVsZ.setScreen(new MainScreen(pVsZ));
-                    });                }else{
+                    });
+                }else{
                     Gdx.app.log("AUTHO", "ERROR NO EXISTE USUARIO");
                 }
             } catch (SerializationException e) {

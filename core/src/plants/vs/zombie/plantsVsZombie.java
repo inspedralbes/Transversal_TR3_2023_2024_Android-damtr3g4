@@ -29,7 +29,7 @@ public class plantsVsZombie extends Game {
 		// A l'iniciar el joc carreguem els recursos
 		AssetManager.load();
 		// I definim la pantalla principal com a la pantalla
-		setScreen(new AuthenticationScreen(this));
+		setScreen(new GameScreen(this));
 
 	}
 

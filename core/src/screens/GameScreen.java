@@ -9,26 +9,34 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.List;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
+import java.util.ArrayList;
+
 import helpers.AssetManager;
 import helpers.InputHandler;
 import objects.Card;
 import objects.Peashooter;
 import objects.ScrollHandler;
+import objects.Sunflower;
 import plants.vs.zombie.plantsVsZombie;
 import utils.Settings;
 
 public class GameScreen implements Screen {
     private plantsVsZombie pVsZ;
     private SpriteBatch batch;
-    private Peashooter peashooter;
+    private ArrayList<Card> plants;
     private OrthographicCamera camera;
     private Stage stage;
+
+    private TextButton btnConvertir;
+    private Card sunflower;
+    private Card peashooter;
     public GameScreen(plantsVsZombie pVsZ) {
         this.pVsZ = pVsZ;
         batch = new SpriteBatch();
@@ -37,8 +45,16 @@ public class GameScreen implements Screen {
         StretchViewport viewport = new StretchViewport(plantsVsZombie.WIDTH, plantsVsZombie.HEIGHT, camera);
         stage = new Stage(viewport);
 
-        peashooter = new Peashooter(240, 50, 46, 60);
+        plants = new ArrayList<>();
+
+        peashooter = new Peashooter(240, 50, 46, 60, false);
+        sunflower = new Sunflower(240, 100, 46, 60, false);
+
+        plants.add(peashooter);
+        plants.add(sunflower);
+
         stage.addActor(peashooter);
+        stage.addActor(sunflower);
         Gdx.input.setInputProcessor(new InputHandler(this));
     }
     @Override
@@ -53,6 +69,7 @@ public class GameScreen implements Screen {
         batch.end();
         stage.draw();
         stage.act(delta);
+
     }
 
 
@@ -95,10 +112,6 @@ public class GameScreen implements Screen {
         return batch;
     }
 
-    public Peashooter getPeashooter() {
-        return peashooter;
-    }
-
     public OrthographicCamera getCamera() {
         return camera;
     }
@@ -107,4 +120,7 @@ public class GameScreen implements Screen {
         return stage;
     }
 
+    public ArrayList<Card> getPlants() {
+        return plants;
+    }
 }

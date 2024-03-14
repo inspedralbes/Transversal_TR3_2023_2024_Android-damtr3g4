@@ -1,30 +1,37 @@
 package objects;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 
 import helpers.AssetManager;
 
 public class Peashooter extends Card {
-    // Diferents posicions de l'Spacecraft: recta, pujant i baixant
     private float stateTime;
-
-    public Peashooter(float x, float y, int width, int height) {
-        super(x, y, width, height);
+    public Peashooter(float x, float y, int width, int height, boolean active) {
+        super(x, y, width, height, active);
     }
 
-
-    public void act(float delta) {
+    public void act(float delta){
         stateTime += delta;
-        // Movem l'Spacecraft depenent de la direcció controlant que no surti de la pantalla
+        if(super.getPosition().x == 0.0 && super.getPosition().y == 0.0){
+            System.out.println("pase para activarme");
+            super.setActive(true);
+        }else{
+            System.out.println("x: " + super.getPosition().x + " y: " + super.getPosition().y);
+        }
     }
 
-    @Override
-    public void draw(Batch batch, float parentAlpha) {
+    public void draw(Batch batch, float parentAlpha){
         super.draw(batch, parentAlpha);
-        TextureRegion currentFrame = (TextureRegion) AssetManager.peashooterDefaultAnimated.getKeyFrame(stateTime, true);
-        batch.draw(currentFrame, super.getPosition().x, super.getPosition().y, super.getWidth(), super.getHeight());
+        if(super.isActive()){
+            TextureRegion currentFrame = (TextureRegion) AssetManager.peashooterDefaultAnimated.getKeyFrame(stateTime, true);
+            batch.draw(currentFrame, super.getPosition().x, super.getPosition().y, super.getWidth(), super.getHeight());
+        }else{
+            Texture t = new Texture(Gdx.files.internal("atrevol.png"));
+            batch.draw(t, super.getPosition().x, super.getPosition().y, super.getWidth(), super.getHeight());
+        }
+
     }
 }
