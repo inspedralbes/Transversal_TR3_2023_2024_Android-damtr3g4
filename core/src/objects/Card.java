@@ -10,18 +10,15 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 
 import helpers.AssetManager;
 
-public class Card extends Actor {
+public abstract class Card extends Actor {
     private Vector2 position;
     private int width, height;
-    private int idAgent;
     private Rectangle hitBoxCard;
-    public Card(float x, float y, int width, int height, int idAgent) {
+    public Card(float x, float y, int width, int height) {
         this.width = width;
         this.height = height;
         position = new Vector2(x, y);
         hitBoxCard = new Rectangle(x, y, width, height);
-        this.idAgent = idAgent;
-
     }
 
     public void act(float delta) {
@@ -31,7 +28,6 @@ public class Card extends Actor {
     @Override
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
-        batch.draw(new Texture(Gdx.files.internal("atrevol.png")), position.x, position.y, width, height);
     }
 
     public Vector2 getPosition() {
@@ -40,10 +36,6 @@ public class Card extends Actor {
 
     public void setPosition(Vector2 position) {
         this.position = position;
-    }
-
-    public int getIdAgent() {
-        return idAgent;
     }
 
     public Rectangle getHitBoxCard() {

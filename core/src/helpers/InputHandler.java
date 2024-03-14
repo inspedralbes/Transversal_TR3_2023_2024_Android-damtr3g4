@@ -13,7 +13,6 @@ public class InputHandler implements InputProcessor {
 
     public InputHandler(GameScreen gameScreen){
         this.gameScreen = gameScreen;
-        this.card = gameScreen.getCard();
     }
 
     @Override

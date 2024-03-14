@@ -58,7 +58,6 @@ public class MainScreen implements Screen {
         table.setFillParent(true);
         stage.addActor(table);
         Gdx.input.setInputProcessor(stage);
-
     }
     private ClickListener btnPlaySoloListener(){
         return new ClickListener(){

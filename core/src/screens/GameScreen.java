@@ -27,10 +27,8 @@ public class GameScreen implements Screen {
     private plantsVsZombie pVsZ;
     private SpriteBatch batch;
     private Peashooter peashooter;
-    private Card card;
     private OrthographicCamera camera;
     private Stage stage;
-    private Table table;
     public GameScreen(plantsVsZombie pVsZ) {
         this.pVsZ = pVsZ;
         batch = new SpriteBatch();
@@ -39,27 +37,8 @@ public class GameScreen implements Screen {
         StretchViewport viewport = new StretchViewport(plantsVsZombie.WIDTH, plantsVsZombie.HEIGHT, camera);
         stage = new Stage(viewport);
 
-        table = new Table();
-        TextButton carta = new TextButton("", AssetManager.skin);
-        TextButton carta2 = new TextButton("", AssetManager.skin,"blue");
-        TextButton carta3 = new TextButton("", AssetManager.skin);
-        TextButton carta4 = new TextButton("", AssetManager.skin, "blue");
-        TextButton carta5 = new TextButton("", AssetManager.skin);
-
-        table.add(carta).width(60).height(80);
-        table.add(carta2).width(60).height(80);
-        table.add(carta3).width(60).height(80);
-        table.add(carta4).width(60).height(80);
-        table.add(carta5).width(60).height(80);
-
-        table.left().top();
-
         peashooter = new Peashooter(240, 50, 46, 60);
-        card = new Card(200, 200, 128,224, 1);
         stage.addActor(peashooter);
-        table.setFillParent(true);
-        stage.addActor(table);
-        stage.addActor(card);
         Gdx.input.setInputProcessor(new InputHandler(this));
     }
     @Override
@@ -108,10 +87,6 @@ public class GameScreen implements Screen {
         stage.dispose();
     }
 
-    public Card getCard() {
-        return card;
-    }
-
     public plantsVsZombie getpVsZ() {
         return pVsZ;
     }
@@ -132,7 +107,4 @@ public class GameScreen implements Screen {
         return stage;
     }
 
-    public Table getTable() {
-        return table;
-    }
 }
