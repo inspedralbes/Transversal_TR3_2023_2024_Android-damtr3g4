@@ -8,12 +8,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 public class AssetManager {
 
-    public static Texture bgGameScreen;
+    public static Texture bgGameScreen, bgGameAuthentication, bgGameMainScreen;
     public static Texture peashooterTexture;
     public static TextureRegion[] peashooterDefaultMovement;
     public static Animation peashooterDefaultAnimated;
     public static Skin skin;
     public static void load(){
+        bgGameAuthentication = new Texture("background.jpg");
+        bgGameMainScreen = new Texture("settingBg.jpg");
         bgGameScreen = new Texture(Gdx.files.internal("bgGameScreen.png"));
         peashooterTexture = new Texture(Gdx.files.internal("peashooter.png"));
         peashooterDefaultMovement = new TextureRegion[7];

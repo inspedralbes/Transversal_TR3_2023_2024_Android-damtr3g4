@@ -103,9 +103,11 @@ public class MainScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        clearScreen();
-        stage.draw();
+        batch.begin();
+        batch.draw(AssetManager.bgGameMainScreen,0,0,plantsVsZombie.WIDTH, plantsVsZombie.HEIGHT);
+        batch.end();
         stage.act(delta);
+        stage.draw();
     }
 
     private void clearScreen() {
