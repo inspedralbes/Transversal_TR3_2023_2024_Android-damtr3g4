@@ -1,33 +1,103 @@
 package helpers;
-
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
-import java.util.ArrayList;
-
-import objects.CardPlant;
+import objects.Pitufo;
+import objects.Shinchan;
+import objects.Weapon;
 import screens.GameScreen;
 
 public class InputHandler implements InputProcessor {
-    private ArrayList<CardPlant> plants;
     private GameScreen gameScreen;
-    private CardPlant selectedCard; // Variable para almacenar la tarjeta seleccionada para arrastrar
+    private Shinchan shinchan;
+    private Pitufo pitufo;
+    private Weapon weapon;
+    private boolean movingUpShinchan = false;
+    private boolean movingDownShinchan = false;
+    private boolean movingLeftShinchan = false;
+    private boolean movingRightShinchan = false;
+    private boolean movingUpPitufo = false;
+    private boolean movingDownPitufo = false;
+    private boolean movingLeftPitufo = false;
+    private boolean movingRightPitufo = false;
+
+    private float speed = 505; // Velocidad de movimiento del Shinchan
 
     public InputHandler(GameScreen gameScreen){
         this.gameScreen = gameScreen;
-        this.plants = gameScreen.getPlants();
+        this.shinchan = gameScreen.getShinchan();
+        this.weapon = gameScreen.getWeapon();
+        this.pitufo = gameScreen.getPitufo();
     }
 
     @Override
     public boolean keyDown(int keycode) {
-        return false;
+        switch (keycode) {
+            case Input.Keys.W:
+                movingUpShinchan = true;
+                break;
+            case Input.Keys.S:
+                movingDownShinchan = true;
+                break;
+            case Input.Keys.A:
+                movingLeftShinchan = true;
+                break;
+            case Input.Keys.D:
+                movingRightShinchan = true;
+                break;
+        }
+        switch (keycode) {
+            case Input.Keys.I:
+                movingUpPitufo = true;
+                break;
+            case Input.Keys.K:
+                movingDownPitufo = true;
+                break;
+            case Input.Keys.J:
+                movingLeftPitufo = true;
+                break;
+            case Input.Keys.L:
+                movingRightPitufo = true;
+                break;
+        }
+        return true; // Indica que se ha manejado el evento
     }
 
     @Override
     public boolean keyUp(int keycode) {
-        return false;
+        switch (keycode) {
+            case Input.Keys.W:
+                movingUpShinchan = false;
+                break;
+            case Input.Keys.S:
+                movingDownShinchan = false;
+                break;
+            case Input.Keys.A:
+                movingLeftShinchan = false;
+                break;
+            case Input.Keys.D:
+                movingRightShinchan = false;
+                break;
+        }
+        switch (keycode) {
+            case Input.Keys.I:
+                movingUpPitufo = false;
+                break;
+            case Input.Keys.K:
+                movingDownPitufo = false;
+                break;
+            case Input.Keys.J:
+                movingLeftPitufo = false;
+                break;
+            case Input.Keys.L:
+                movingRightPitufo = false;
+                break;
+        }
+        return true; // Indica que se ha manejado el evento
     }
 
     @Override
@@ -37,19 +107,12 @@ public class InputHandler implements InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        // Verificar si se ha tocado algún objeto (tarjeta)
-        for (CardPlant card : plants) {
-            if (card.getHitBoxCard().contains(screenX, Gdx.graphics.getHeight() - screenY)) {
-                selectedCard = card; // Guardar la referencia al objeto seleccionado
-                return true; // Indicar que el evento ha sido manejado
-            }
-        }
-        return false; // Si no se ha tocado ningún objeto, continuar propagando el evento
+        // Implementación de la lógica de toque, si es necesario
+        return false;
     }
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        selectedCard = null; // Al levantar el dedo, se deselecciona el objeto
         return false;
     }
 
@@ -60,13 +123,7 @@ public class InputHandler implements InputProcessor {
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
-        // Si hay un objeto seleccionado, actualizar su posición con la nueva posición del cursor
-        if (selectedCard != null) {
-            selectedCard.setPosition(new Vector2(screenX, Gdx.graphics.getHeight() - screenY));
-            selectedCard.setHitBoxCard(new Rectangle(screenX, Gdx.graphics.getHeight() - screenY, selectedCard.getWidth(), selectedCard.getHeight()));
-            return true; // Indicar que el evento ha sido manejado
-        }
-        return false; // Si no hay ningún objeto seleccionado, continuar propagando el evento
+        return false;
     }
 
     @Override
@@ -78,4 +135,70 @@ public class InputHandler implements InputProcessor {
     public boolean scrolled(float amountX, float amountY) {
         return false;
     }
+
+    // Otros métodos de la interfaz InputProcessor que puedes implementar según tus necesidades
+
+    public void updateShinchan(float delta) {
+        Vector2 position = shinchan.getPosition();
+
+        if (movingUpShinchan) {
+            position.y += speed * delta;
+        }
+        if (movingDownShinchan) {
+            position.y -= speed * delta;
+        }
+        if (movingLeftShinchan) {
+            position.x -= speed * delta;
+        }
+        if (movingRightShinchan) {
+            position.x += speed * delta;
+        }
+
+        // Asegurarse de que el Shinchan no se salga de los límites de la pantalla
+        position.x = MathUtils.clamp(position.x, 0, Gdx.graphics.getWidth() - shinchan.getWidth());
+        position.y = MathUtils.clamp(position.y, 0, Gdx.graphics.getHeight() - shinchan.getHeight());
+
+        shinchan.setPosition(position.x, position.y);
+        shinchan.setHitBoxCard(new Rectangle(position.x, position.y, shinchan.getWidth(), shinchan.getHeight()));
+        // Verificar la colisión entre Shinchan y Weapon
+        if (shinchan.getHitBoxCard().overlaps(weapon.getHitBoxCard())) {
+            // Colocar el Weapon encima del Shinchan
+            weapon.setGrabbed(true);
+            shinchan.setWeapon(true);
+            weapon.setIdPlayer(shinchan.getId());
+        }
+    }
+
+    public void updatePitufo(float delta) {
+        Vector2 position = pitufo.getPosition();
+
+        if (movingUpPitufo) {
+            position.y += speed * delta;
+        }
+        if (movingDownPitufo) {
+            position.y -= speed * delta;
+        }
+        if (movingLeftPitufo) {
+            position.x -= speed * delta;
+        }
+        if (movingRightPitufo) {
+            position.x += speed * delta;
+        }
+
+        // Asegurarse de que el Shinchan no se salga de los límites de la pantalla
+        position.x = MathUtils.clamp(position.x, 0, Gdx.graphics.getWidth() - shinchan.getWidth());
+        position.y = MathUtils.clamp(position.y, 0, Gdx.graphics.getHeight() - shinchan.getHeight());
+
+        pitufo.setPosition(position.x, position.y);
+        pitufo.setHitBoxCard(new Rectangle(position.x, position.y, pitufo.getWidth(), pitufo.getHeight()));
+        // Verificar la colisión entre Shinchan y Weapon
+        if (pitufo.getHitBoxCard().overlaps(weapon.getHitBoxCard())) {
+            // Colocar el Weapon encima del Shinchan
+            weapon.setGrabbed(true);
+            pitufo.setWeapon(true);
+            weapon.setIdPlayer(pitufo.getId());
+        }
+    }
+
+    // Otros métodos de la interfaz InputProcessor que puedes implementar según tus necesidades
 }

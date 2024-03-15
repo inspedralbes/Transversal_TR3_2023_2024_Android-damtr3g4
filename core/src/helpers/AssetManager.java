@@ -15,10 +15,20 @@ public class AssetManager {
     public static Texture sunflowerTexture;
     public static TextureRegion[] sunflowerDefaultMovement;
     public static Animation sunflowerDefaultAnimated;
+    public static Texture shinChanTexture;
+    public static TextureRegion shinChanDefault;
+    public static Texture pitufuTexture;
+    public static TextureRegion pitufuDefault;
     public static Skin skin;
     public static void load(){
+        shinChanTexture = new Texture(Gdx.files.internal("shinchan.png"));
+        pitufuTexture = new Texture(Gdx.files.internal("pitufo.png"));
         bgGameScreen = new Texture(Gdx.files.internal("bgGameScreen.png"));
         peashooterTexture = new Texture(Gdx.files.internal("peashooter.png"));
+
+        pitufuDefault = new TextureRegion(pitufuTexture, 49, 76, 21, 28);
+        shinChanDefault = new TextureRegion(shinChanTexture, 12, 33, 21, 28);
+
         peashooterDefaultMovement = new TextureRegion[8];
         for(int i = 0; i < 8; i++) {
             peashooterDefaultMovement[i] = new TextureRegion(peashooterTexture, i * 27, 2, 26, 30);
