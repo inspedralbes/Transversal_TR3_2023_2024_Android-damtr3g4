@@ -1,16 +1,11 @@
 package objects;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
-import helpers.AssetManager;
-
-public class Card extends Actor {
+public class CardPlant extends Actor {
     private Vector2 position;
     private float width, height;
     private Rectangle hitBoxCard;
@@ -31,7 +26,7 @@ public class Card extends Actor {
         this.hitBoxCard = hitBoxCard;
     }
 
-    public Card(float x, float y, float width, float height, boolean active) {
+    public CardPlant(float x, float y, float width, float height, boolean active) {
         this.position = new Vector2(x, y);
         this.width = width;
         this.height = height;
@@ -46,8 +41,6 @@ public class Card extends Actor {
     @Override
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
-        /*TextureRegion currentFrame = (TextureRegion) AssetManager.sunflowerDefaultAnimated.getKeyFrame(stateTime, true);
-        batch.draw(currentFrame, position.x, position.y, width, height);*/
     }
 
     public Vector2 getPosition() {

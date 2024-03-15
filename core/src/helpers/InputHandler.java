@@ -7,13 +7,13 @@ import com.badlogic.gdx.math.Vector2;
 
 import java.util.ArrayList;
 
-import objects.Card;
+import objects.CardPlant;
 import screens.GameScreen;
 
 public class InputHandler implements InputProcessor {
-    private ArrayList<Card> plants;
+    private ArrayList<CardPlant> plants;
     private GameScreen gameScreen;
-    private Card selectedCard; // Variable para almacenar la tarjeta seleccionada para arrastrar
+    private CardPlant selectedCard; // Variable para almacenar la tarjeta seleccionada para arrastrar
 
     public InputHandler(GameScreen gameScreen){
         this.gameScreen = gameScreen;
@@ -38,7 +38,7 @@ public class InputHandler implements InputProcessor {
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         // Verificar si se ha tocado algún objeto (tarjeta)
-        for (Card card : plants) {
+        for (CardPlant card : plants) {
             if (card.getHitBoxCard().contains(screenX, Gdx.graphics.getHeight() - screenY)) {
                 selectedCard = card; // Guardar la referencia al objeto seleccionado
                 return true; // Indicar que el evento ha sido manejado

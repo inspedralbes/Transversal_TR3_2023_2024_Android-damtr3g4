@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import helpers.AssetManager;
 
-public class Peashooter extends Card {
+public class Peashooter extends CardPlant {
     private float stateTime;
     public Peashooter(float x, float y, int width, int height, boolean active) {
         super(x, y, width, height, active);
@@ -18,9 +18,7 @@ public class Peashooter extends Card {
         if(super.getPosition().x == 0.0 && super.getPosition().y == 0.0){
             System.out.println("pase para activarme");
             super.setActive(true);
-        }else{
-            System.out.println("x: " + super.getPosition().x + " y: " + super.getPosition().y);
-        }
+        }else{}
     }
 
     public void draw(Batch batch, float parentAlpha){
