@@ -4,10 +4,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 public class AssetManager {
 
+    public static TiledMap tiledMap; //Localizar el mapa
     public static Texture bgGameScreen;
     public static Texture peashooterTexture;
     public static TextureRegion[] peashooterDefaultMovement;
@@ -21,6 +24,7 @@ public class AssetManager {
     public static TextureRegion pitufuDefault;
     public static Skin skin;
     public static void load(){
+        tiledMap = new TmxMapLoader().load("Mapa.tmx");
         shinChanTexture = new Texture(Gdx.files.internal("shinchan.png"));
         pitufuTexture = new Texture(Gdx.files.internal("pitufo.png"));
         bgGameScreen = new Texture(Gdx.files.internal("bgGameScreen.png"));

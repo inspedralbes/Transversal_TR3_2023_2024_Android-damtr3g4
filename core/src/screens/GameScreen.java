@@ -7,6 +7,9 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
+import com.badlogic.gdx.maps.tiled.renderers.OrthoCachedTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
@@ -25,6 +28,8 @@ import objects.Weapon;
 import plants.vs.zombie.plantsVsZombie;
 
 public class GameScreen implements Screen {
+    private TiledMap tiledMap;
+    private OrthoCachedTiledMapRenderer tiledMapRenderer;
     private plantsVsZombie pVsZ;
     private SpriteBatch batch;
     private OrthographicCamera camera;
@@ -37,6 +42,8 @@ public class GameScreen implements Screen {
     public GameScreen(plantsVsZombie pVsZ) {
         this.pVsZ = pVsZ;
         batch = new SpriteBatch();
+        tiledMap = AssetManager.tiledMap; //Cargo el mapa en el constructor de la clase juego
+        tiledMapRenderer = new OrthoCachedTiledMapRenderer(tiledMap);
         camera = new OrthographicCamera(plantsVsZombie.WIDTH, plantsVsZombie.HEIGHT);
         camera.setToOrtho(false);
         StretchViewport viewport = new StretchViewport(plantsVsZombie.WIDTH, plantsVsZombie.HEIGHT, camera);
@@ -62,6 +69,13 @@ public class GameScreen implements Screen {
         inputHandler.updateShinchan(delta);
         inputHandler.updatePitufo(delta);
         stage.draw();
+        camera.update();
+        tiledMapRenderer.setView(camera);
+        tiledMapRenderer.render();
+        batch.begin();
+        shinchan.draw(batch, delta);
+        pitufo.draw(batch, delta);
+        batch.end();
         stage.act(delta);
         ShapeRenderer shapeRenderer = new ShapeRenderer();
         shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
