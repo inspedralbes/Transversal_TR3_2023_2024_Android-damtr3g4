@@ -15,13 +15,15 @@ import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter;
 import com.badlogic.gdx.utils.SerializationException;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
+import com.mygdx.game.MyGdxGame;
 
 import helpers.AssetManager;
 import helpers.User;
-import plants.vs.zombie.plantsVsZombie;
+import io.socket.client.IO;
+import io.socket.client.Socket;
 
 public class AuthenticationScreen implements Screen {
-    private plantsVsZombie pVsZ;
+    private MyGdxGame game;
     private Stage stage;
     private SpriteBatch batch;
     private OrthographicCamera camera;
@@ -29,12 +31,12 @@ public class AuthenticationScreen implements Screen {
     private TextButton btnLogin;
     private TextField userTextField;
     private TextField passTextField;
-
-    public AuthenticationScreen(plantsVsZombie pVsZ){
-        this.pVsZ = pVsZ;
-        camera = new OrthographicCamera(plantsVsZombie.WIDTH, plantsVsZombie.HEIGHT);
+    private Socket socket;
+    public AuthenticationScreen(MyGdxGame game){
+        this.game = game;
+        camera = new OrthographicCamera(MyGdxGame.WIDTH, MyGdxGame.HEIGHT);
         camera.setToOrtho(false);
-        StretchViewport viewport = new StretchViewport(plantsVsZombie.WIDTH, plantsVsZombie.HEIGHT, camera);
+        StretchViewport viewport = new StretchViewport(MyGdxGame.WIDTH, MyGdxGame.HEIGHT, camera);
         stage = new Stage(viewport);
 
         table = new Table();
@@ -54,8 +56,10 @@ public class AuthenticationScreen implements Screen {
 
         table.setFillParent(true);
         stage.addActor(table);
+
         Gdx.input.setInputProcessor(stage);
     }
+
     @Override
     public void show() {
         batch = new SpriteBatch();
@@ -91,8 +95,10 @@ public class AuthenticationScreen implements Screen {
     public void dispose() {
         batch.dispose();
     }
+
     private ResponseAuthenticator responseAuthenticator;
-    private ClickListener btnLoginListener(){
+
+    private ClickListener btnLoginListener() {
         return new ClickListener() {
             @Override
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
@@ -110,7 +116,7 @@ public class AuthenticationScreen implements Screen {
         };
     }
 
-    public void userAuthenticator(String jsonData){
+    public void userAuthenticator(String jsonData) {
         HttpRequestBuilder requestBuilder = new HttpRequestBuilder();
         Net.HttpRequest httpRequest = requestBuilder.newRequest()
                 .method(Net.HttpMethods.POST)
@@ -149,6 +155,7 @@ public class AuthenticationScreen implements Screen {
             return id;
         }
     }
+
     private class MyHttpResponseListener implements Net.HttpResponseListener {
         @Override
         public void handleHttpResponse(Net.HttpResponse httpResponse) {
@@ -159,13 +166,17 @@ public class AuthenticationScreen implements Screen {
                 // Utiliza una instancia de la clase Json para convertir la cadena JSON en un objeto ResponseAuthenticator
                 Json json = new Json();
                 responseAuthenticator = json.fromJson(ResponseAuthenticator.class, responseData);
+                json.setOutputType(JsonWriter.OutputType.json);
+                String jsonData = json.toJson(responseAuthenticator);
 
-                if(responseAuthenticator.isAuthorization()){
+                if (responseAuthenticator.isAuthorization()) {
                     Gdx.app.postRunnable(() -> {
+                        connectSocket();
+                        socket.emit("login", jsonData);
                         Gdx.app.log("CAMBIANDO", "ESTOY YENDO A MAIN SCREEN");
-                        pVsZ.setScreen(new MainScreen(pVsZ));
+                        game.setScreen(new MainScreen(game));
                     });
-                }else{
+                } else {
                     Gdx.app.log("AUTHO", "ERROR NO EXISTE USUARIO");
                 }
             } catch (SerializationException e) {
@@ -173,6 +184,7 @@ public class AuthenticationScreen implements Screen {
                 System.out.println("Error al analizar el JSON: " + e.getMessage());
             }
         }
+
         @Override
         public void failed(Throwable t) {
             // Manejo de errores en caso de que la solicitud falle
@@ -185,8 +197,14 @@ public class AuthenticationScreen implements Screen {
             System.out.println("La solicitud fue cancelada.");
         }
     }
-
-
-
-
+    public void connectSocket(){
+        try{
+            socket = IO.socket("http://192.168.19.253:3789");
+            socket.connect();
+            System.out.println("VA");
+        }catch (Exception e){
+            System.out.println("NO VA");
+            System.out.println(e);
+        }
+    }
 }
