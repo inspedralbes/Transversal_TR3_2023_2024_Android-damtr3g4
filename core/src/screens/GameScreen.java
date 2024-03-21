@@ -7,8 +7,13 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.maps.MapLayer;
+import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.MapProperties;
+import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthoCachedTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -39,14 +44,21 @@ public class GameScreen implements Screen {
     private Pitufo pitufo;
     private Weapon weapon;
     private InputHandler inputHandler;
+    private int mapWidth;
+    private int mapHeight;
+    private MapProperties prop;
+    private TiledMapTileLayer objectLayer;
     public GameScreen(plantsVsZombie pVsZ) {
         this.pVsZ = pVsZ;
         batch = new SpriteBatch();
         tiledMap = AssetManager.tiledMap; //Cargo el mapa en el constructor de la clase juego
         tiledMapRenderer = new OrthoCachedTiledMapRenderer(tiledMap);
-        camera = new OrthographicCamera(plantsVsZombie.WIDTH, plantsVsZombie.HEIGHT);
-        camera.setToOrtho(false);
-        StretchViewport viewport = new StretchViewport(plantsVsZombie.WIDTH, plantsVsZombie.HEIGHT, camera);
+        prop = tiledMap.getProperties();
+        mapWidth = prop.get("width", Integer.class) * prop.get("tilewidth", Integer.class);
+        mapHeight = prop.get("height", Integer.class) * prop.get("tileheight", Integer.class);
+        camera = new OrthographicCamera(mapWidth,mapHeight);
+        camera.setToOrtho(false, mapWidth, mapHeight); //Es importante que esté para que no se salgan los personajes de la pantalla
+        StretchViewport viewport = new StretchViewport(mapWidth, mapHeight, camera);
         stage = new Stage(viewport);
 
         shinchan = new Shinchan(100, 100, 40,50);
@@ -59,12 +71,42 @@ public class GameScreen implements Screen {
         inputHandler = new InputHandler(this);
         Gdx.input.setInputProcessor(inputHandler);
     }
+
+    private void checkCollisions() {
+        MapLayer objectLayer = tiledMap.getLayers().get("Cerdo");
+        System.out.println(objectLayer);
+        if (objectLayer != null) {
+            for (MapObject object : objectLayer.getObjects()) {
+                if (object instanceof RectangleMapObject) {
+                    RectangleMapObject rectangleObject = (RectangleMapObject) object;
+                    Rectangle rectangle = rectangleObject.getRectangle();
+
+                    // Verificar colisión con los rectángulos de los objetos
+                    if (shinchan.getHitBoxCard().overlaps(rectangle)) {
+                        // Acciones cuando hay colisión con Shinchan
+                        // Mover a Shinchan a la posición anterior para evitar que atraviese el objeto
+                        shinchan.setPosition(45,50);
+                    }
+                    if (pitufo.getHitBoxCard().overlaps(rectangle)) {
+                        // Acciones cuando hay colisión con Pitufo
+                        // Mover a Pitufo a la posición anterior para evitar que atraviese el objeto
+                        //pitufo.setPosition(pitufo.getPrevX(), pitufo.getPrevY());
+                    }
+                    // Puedes agregar más condiciones para otros personajes si los tienes
+                }
+            }
+        }
+    }
+
+
     @Override
     public void show() {
     }
 
     @Override
     public void render(float delta) {
+        System.out.println("Width: " + mapHeight + " Heidth: " + mapWidth);
+        checkCollisions();
         clearScreen();
         inputHandler.updateShinchan(delta);
         inputHandler.updatePitufo(delta);

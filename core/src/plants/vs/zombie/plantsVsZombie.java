@@ -15,7 +15,7 @@ import screens.MainScreen;
 
 public class plantsVsZombie extends Game {
 	public static final int WIDTH = 1000;
-	public static final int HEIGHT = 500;
+	public static final int HEIGHT = 550;
 	private Batch batch;
 
 	public Batch getBatch() {
