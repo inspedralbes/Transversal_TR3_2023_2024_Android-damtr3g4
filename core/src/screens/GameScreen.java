@@ -73,26 +73,29 @@ public class GameScreen implements Screen {
     }
 
     private void checkCollisions() {
-        MapLayer objectLayer = tiledMap.getLayers().get("Cerdo");
-        System.out.println(objectLayer);
-        if (objectLayer != null) {
-            for (MapObject object : objectLayer.getObjects()) {
-                if (object instanceof RectangleMapObject) {
-                    RectangleMapObject rectangleObject = (RectangleMapObject) object;
-                    Rectangle rectangle = rectangleObject.getRectangle();
+        TiledMapTileLayer obstacleLayer = (TiledMapTileLayer) tiledMap.getLayers().get("Cerdo");
+        System.out.println(obstacleLayer);
+        // Iterar sobre todas las celdas del mapa
+        for (int y = 0; y < obstacleLayer.getHeight(); y++) {
+            for (int x = 0; x < obstacleLayer.getWidth(); x++) {
+                // Obtener la baldosa en la posición (x, y)
+                TiledMapTileLayer.Cell cell = obstacleLayer.getCell(x, y);
 
-                    // Verificar colisión con los rectángulos de los objetos
-                    if (shinchan.getHitBoxCard().overlaps(rectangle)) {
-                        // Acciones cuando hay colisión con Shinchan
-                        // Mover a Shinchan a la posición anterior para evitar que atraviese el objeto
-                        shinchan.setPosition(45,50);
+                // Verificar si la celda contiene un obstáculo
+                if (cell != null) {
+                    // Aquí puedes manejar la lógica para los obstáculos
+                    float obstacleX = x * obstacleLayer.getTileWidth();
+                    float obstacleY = y * obstacleLayer.getTileHeight();
+                    System.out.println("X " + obstacleX + " Y " + obstacleY);
+
+                    // Verificar si Shinchan está en colisión con el obstáculo
+                    if (shinchan.getHitBoxCard().overlaps(new Rectangle(obstacleX, obstacleY, obstacleLayer.getTileWidth(), obstacleLayer.getTileHeight()))) {
+                        // Shinchan ha chocado con un obstáculo, detener su movimiento
+                        shinchan.setCollidingWithObstacle(true); // Activar la bandera de colisión
+                        System.out.println("Shinchan chocó con un obstáculo en: (" + x + ", " + y + ")");
+                    } else {
+                        shinchan.setCollidingWithObstacle(false); // Desactivar la bandera de colisión
                     }
-                    if (pitufo.getHitBoxCard().overlaps(rectangle)) {
-                        // Acciones cuando hay colisión con Pitufo
-                        // Mover a Pitufo a la posición anterior para evitar que atraviese el objeto
-                        //pitufo.setPosition(pitufo.getPrevX(), pitufo.getPrevY());
-                    }
-                    // Puedes agregar más condiciones para otros personajes si los tienes
                 }
             }
         }
@@ -106,7 +109,7 @@ public class GameScreen implements Screen {
     @Override
     public void render(float delta) {
         System.out.println("Width: " + mapHeight + " Heidth: " + mapWidth);
-        checkCollisions();
+
         clearScreen();
         inputHandler.updateShinchan(delta);
         inputHandler.updatePitufo(delta);
@@ -137,6 +140,7 @@ public class GameScreen implements Screen {
         if((weapon.isGrabbed() && shinchan.isWeapon()) && (weapon.getIdPlayer() == shinchan.getId()) || (weapon.isGrabbed() && pitufo.isWeapon()) && (weapon.getIdPlayer() == pitufo.getId())){
             weapon.setHitBoxCard(new Rectangle(pitufo.getHitBoxCard().x,pitufo.getHitBoxCard().y + pitufo.getHeight(), weapon.getWidth(), weapon.getHeight()));
         }
+        checkCollisions();
 
     }
 

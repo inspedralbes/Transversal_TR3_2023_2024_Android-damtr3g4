@@ -45,45 +45,6 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <objectgroup id="34" name="Silla" parallaxx="45" parallaxy="32">
-  <object id="6" x="20395" y="13213.8" width="43.1158" height="61.0807"/>
-  <object id="7" x="20683.6" y="13370.7" width="43.1158" height="68.2667"/>
-  <object id="8" x="21181.8" y="13474.9" width="49.1041" height="64.6737"/>
-  <object id="17" x="20392.6" y="18108.6" width="50.3018" height="70.662"/>
-  <object id="18" x="20680" y="18267.9" width="51.4994" height="70.662"/>
-  <object id="21" x="21130.3" y="18335" width="47.9064" height="69.4643"/>
-  <object id="32" x="23237" y="13434.2" width="47.9064" height="68.2667"/>
-  <object id="37" x="22398.7" y="18039.1" width="47.9064" height="67.069"/>
-  <object id="38" x="22684.9" y="18198.4" width="47.9064" height="73.0573"/>
-  <object id="39" x="23132.8" y="18261.9" width="47.9064" height="70.662"/>
-  <object id="40" x="21509.9" y="18641.6" width="53.8947" height="69.4643"/>
- </objectgroup>
- <objectgroup id="35" name="Semafoto" parallaxx="256.3">
-  <object id="9" x="256.299" y="123.359" width="32.3368" height="165.277"/>
-  <object id="10" x="1275.89" y="129.408" width="32.3368" height="164.08"/>
-  <object id="19" x="119131" y="579.223" width="29.9415" height="164.08"/>
-  <object id="20" x="118085" y="573.68" width="33.5345" height="165.277"/>
-  <object id="35" x="130702" y="575.556" width="38.3251" height="171.265"/>
-  <object id="36" x="129607" y="126.47" width="32.3368" height="165.277"/>
- </objectgroup>
- <objectgroup id="38" name="Coche azul" parallaxx="736.56">
-  <object id="25" x="3064.56" y="426.531" width="95.8129" height="162.882"/>
-  <object id="29" x="339021" y="-2.39532" width="100.604" height="166.475"/>
-  <object id="30" x="376549" y="861.253" width="99.4058" height="130.545"/>
-  <object id="31" x="374256" y="-2.39532" width="100.604" height="165.277"/>
- </objectgroup>
- <objectgroup id="40" name="Cerdo">
-  <object id="27" x="382.054" y="528.168" width="83.8363" height="81.4409"/>
-  <object id="28" x="668.295" y="340.136" width="81.4409" height="79.0456"/>
- </objectgroup>
- <objectgroup id="41" name="Basura">
-  <object id="33" x="-2.39532" y="303.008" width="81.4409" height="79.0456"/>
-  <object id="34" x="797.642" y="233.544" width="81.4409" height="85.0339"/>
-  <object id="41" x="732.968" y="941.361" width="80.2433" height="82.6386"/>
- </objectgroup>
- <objectgroup id="39" name="Coche marron">
-  <object id="26" x="382.054" y="827.584" width="99.4058" height="196.416"/>
- </objectgroup>
  <layer id="28" name="Semaforo" width="32" height="32">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,

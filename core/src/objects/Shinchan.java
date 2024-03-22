@@ -81,4 +81,20 @@ public class Shinchan extends Actor {
     public void setWeapon(boolean weapon) {
         this.weapon = weapon;
     }
+
+
+    private boolean collidingWithObstacle;
+
+
+    public void setCollidingWithObstacle(boolean colliding) {
+        this.collidingWithObstacle = colliding;
+    }
+
+    // Método para mover Shinchan
+    public void move(float deltaX, float deltaY) {
+        if (!collidingWithObstacle) {
+            // Mover Shinchan solo si no está colisionando con un obstáculo
+            setPosition(getX() + deltaX, getY() + deltaY);
+        }
+    }
 }
