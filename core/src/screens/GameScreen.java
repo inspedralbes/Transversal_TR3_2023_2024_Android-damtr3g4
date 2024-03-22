@@ -17,6 +17,9 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.mygdx.game.MyGdxGame;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 import helpers.AssetManager;
@@ -51,14 +54,12 @@ public class GameScreen implements Screen {
             stage.addActor(u);
         }
         int pos = 1;
-        System.out.println(users.size());
         for (User u:users) {
             if(u.getId() == AssetManager.responseAuthenticator.getId()){
                 pos = users.indexOf(u);
             }
         }
-        User uSend = this.users.get(pos);
-        inputHandlerUserLocal = new InputHandlerUserLocal(this, uSend);
+        inputHandlerUserLocal = new InputHandlerUserLocal(this, pos);
         Gdx.input.setInputProcessor(inputHandlerUserLocal);
     }
     @Override
@@ -69,29 +70,38 @@ public class GameScreen implements Screen {
     @Override
     public void render(float delta) {
         clearScreen();
-        inputHandlerUserLocal.updateUserLocal(delta);
-        socket.on("getMovementUser", new Emitter.Listener() {
-            @Override
-            public void call(Object... args) {
-                for (int i = 0; i < args.length; i++){
-                    System.out.println("pos " + i + ":" + args[i]);
-                }
-                int userId = Integer.parseInt(args[0].toString());
-                int pos = 1;
-                for (User u:users) {
-                    if(userId == u.getId()){
-                        pos = users.indexOf(u);
-                    }
-                }
-                User uSend = users.get(pos);
-                int keycode = Integer.parseInt(args[1].toString());
-                boolean state = Boolean.parseBoolean(args[2].toString());
-                udateUserSocket(delta, uSend, keycode, state);
-            }
-        });
+        inputHandlerUserLocal.updateUserLocal();
+        if (inputHandlerUserLocal.isEmitRequired()) {
+            inputHandlerUserLocal.emitUsers();
+        }
+        setNewPositions();
         stage.draw();
         stage.act(delta);
         drawActorBorders();
+    }
+    public void setNewPositions(){
+        socket.on("getMovementUser", new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                String jsonUsers = args[0].toString();
+                System.out.println(jsonUsers);
+                JSONObject jsonObject = new JSONObject(jsonUsers);
+
+                float x = jsonObject.getFloat("x");
+                float y = jsonObject.getFloat("y");
+                float width = jsonObject.getFloat("width");
+                float height = jsonObject.getFloat("height");
+                int id = jsonObject.getInt("id");
+                for (User u:users) {
+                    if(u.getId() == id){
+                        u.setPosition(new Vector2(x,y));
+                        u.setWidth(width);
+                        u.setHeight(height);
+                        u.setHitBoxCard(new Rectangle(x,y,width,height));
+                    }
+                }
+            }
+        });
     }
 
     public void udateUserSocket(float delta, User user, int keycode, boolean state){

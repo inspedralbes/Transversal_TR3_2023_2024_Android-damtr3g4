@@ -5,6 +5,10 @@ public class User extends Character{
     private String usuario;
     private int id;
 
+    public User(float x, float y, float width, float height) {
+        super(x, y, width, height);
+    }
+
     public User(float x, float y, float width, float height, String correo, String usuario, int id) {
         super(x, y, width, height);
         this.correo = correo;
