@@ -26,7 +26,7 @@ public class AssetManager {
     public static Skin skin;
     public static void load(){
         try{
-            socket = IO.socket("http://192.168.19.253:3789");
+            socket = IO.socket("http://tr3.dam.inspedralbes.cat:3789");
             socket.connect();
             System.out.println("VA");
         }catch (Exception e){

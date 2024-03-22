@@ -114,7 +114,7 @@ public class JoinLobbyScreen implements Screen {
         HttpRequestBuilder requestBuilder = new HttpRequestBuilder();
         Net.HttpRequest httpRequest = requestBuilder.newRequest()
                 .method(Net.HttpMethods.POST)
-                .url("http://localhost:3789/joinGame")
+                .url("http://tr3.dam.inspedralbes.cat:3789/joinGame")
                 .header("Content-Type", "application/json") // Establece el encabezado Content-Type como aplicación/json
                 .content(jsonData) // Establece el cuerpo de la solicitud como el JSON que has creado
                 .build();
