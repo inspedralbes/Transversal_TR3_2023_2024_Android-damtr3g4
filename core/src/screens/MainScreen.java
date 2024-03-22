@@ -17,9 +17,10 @@ import com.badlogic.gdx.utils.SerializationException;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.mygdx.game.MyGdxGame;
 
+import java.security.SecureRandom;
+
 import helpers.AssetManager;
-import helpers.Game;
-import helpers.User;
+import helpers.GameSend;
 
 public class MainScreen implements Screen {
     private MyGdxGame game;
@@ -63,23 +64,42 @@ public class MainScreen implements Screen {
         Gdx.input.setInputProcessor(stage);
     }
     private ResponseInitGame responseInitGame;
+    public static String generateRandomPassword(int len)
+    {
+        // Rango ASCII – alfanumérico (0-9, a-z, A-Z)
+        final String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+        SecureRandom random = new SecureRandom();
+        StringBuilder sb = new StringBuilder();
+
+        // cada iteración del bucle elige aleatoriamente un carácter del dado
+        // rango ASCII y lo agrega a la instancia `StringBuilder`
+
+        for (int i = 0; i < len; i++)
+        {
+            int randomIndex = random.nextInt(chars.length());
+            sb.append(chars.charAt(randomIndex));
+        }
+
+        return sb.toString();
+    }
     private ClickListener btnPlayCreateLobbyListener(){
         return new ClickListener(){
             @Override
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y){
                 responseInitGame = new ResponseInitGame();
-                Game dataObject = new Game("5", "waiting", "pruebaPAI7");
+                GameSend dataObject = new GameSend("5", "waiting", generateRandomPassword(6));
 
                 // Convertir el objeto a JSON
                 Json json = new Json();
                 json.setOutputType(JsonWriter.OutputType.json);
                 String jsonData = json.toJson(dataObject);
 
-                userAuthenticator(jsonData);
+                initGame(jsonData);
             }
         };
     }
-    public void userAuthenticator(String jsonData) {
+    public void initGame(String jsonData) {
         HttpRequestBuilder requestBuilder = new HttpRequestBuilder();
         Net.HttpRequest httpRequest = requestBuilder.newRequest()
                 .method(Net.HttpMethods.POST)
@@ -110,6 +130,7 @@ public class MainScreen implements Screen {
                 System.out.println(responseInitGame);
                 Gdx.app.postRunnable(() -> {
                     Gdx.app.log("CAMBIANDO", "ESTOY YENDO A CREATE LOBBY SCREEN");
+                    //TENGO QUE CAMBIAR EL IDGAME POR EL Q SE GENERA Y EL PASSWORD
                     game.setScreen(new LobbyScreen(game, 1, "password"));
                 });
 

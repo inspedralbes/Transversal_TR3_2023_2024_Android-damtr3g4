@@ -1,6 +1,6 @@
 package helpers;
 
-public class User {
+public class UserResponse {
     private String mail;
     private String password;
 
@@ -20,7 +20,7 @@ public class User {
         this.password = password;
     }
 
-    public User(String mail, String password) {
+    public UserResponse(String mail, String password) {
         this.mail = mail;
         this.password = password;
     }

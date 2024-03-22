@@ -1,17 +1,17 @@
 package helpers;
 
-public class Game {
+public class GameSend {
     private String numPlayers;
     private String state;
     private String password;
 
-    public Game(String numPlayers, String state, String password) {
+    public GameSend(String numPlayers, String state, String password) {
         this.numPlayers = numPlayers;
         this.state = state;
         this.password = password;
     }
 
-    public Game(String state, String password) {
+    public GameSend(String state, String password) {
         this.state = state;
         this.password = password;
     }

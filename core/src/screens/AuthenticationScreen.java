@@ -1,5 +1,8 @@
 package screens;
 
+import static helpers.AssetManager.responseAuthenticator;
+import static helpers.AssetManager.socket;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Net;
 import com.badlogic.gdx.Screen;
@@ -18,9 +21,8 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.mygdx.game.MyGdxGame;
 
 import helpers.AssetManager;
-import helpers.User;
-import io.socket.client.IO;
-import io.socket.client.Socket;
+import helpers.ResponseAuthenticator;
+import helpers.UserResponse;
 
 public class AuthenticationScreen implements Screen {
     private MyGdxGame game;
@@ -31,7 +33,6 @@ public class AuthenticationScreen implements Screen {
     private TextButton btnLogin;
     private TextField userTextField;
     private TextField passTextField;
-    private Socket socket;
     public AuthenticationScreen(MyGdxGame game){
         this.game = game;
         camera = new OrthographicCamera(MyGdxGame.WIDTH, MyGdxGame.HEIGHT);
@@ -96,15 +97,13 @@ public class AuthenticationScreen implements Screen {
         batch.dispose();
     }
 
-    private ResponseAuthenticator responseAuthenticator;
 
     private ClickListener btnLoginListener() {
         return new ClickListener() {
             @Override
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
-                responseAuthenticator = new ResponseAuthenticator();
                 // Crear un objeto para representar los datos que deseas enviar
-                User dataObject = new User(userTextField.getText(), passTextField.getText());
+                UserResponse dataObject = new UserResponse(userTextField.getText(), passTextField.getText());
 
                 // Convertir el objeto a JSON
                 Json json = new Json();
@@ -129,33 +128,6 @@ public class AuthenticationScreen implements Screen {
         System.out.println(httpResponseListener);
     }
 
-    static class ResponseAuthenticator {
-        private boolean authorization;
-        private String name;
-        private int id;
-
-        public ResponseAuthenticator() {
-        }
-
-        public ResponseAuthenticator(boolean authorization, String name, int id) {
-            this.authorization = authorization;
-            this.name = name;
-            this.id = id;
-        }
-
-        public boolean isAuthorization() {
-            return authorization;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public int getId() {
-            return id;
-        }
-    }
-
     private class MyHttpResponseListener implements Net.HttpResponseListener {
         @Override
         public void handleHttpResponse(Net.HttpResponse httpResponse) {
@@ -171,7 +143,6 @@ public class AuthenticationScreen implements Screen {
 
                 if (responseAuthenticator.isAuthorization()) {
                     Gdx.app.postRunnable(() -> {
-                        connectSocket();
                         socket.emit("login", jsonData);
                         Gdx.app.log("CAMBIANDO", "ESTOY YENDO A MAIN SCREEN");
                         game.setScreen(new MainScreen(game));
@@ -195,16 +166,6 @@ public class AuthenticationScreen implements Screen {
         public void cancelled() {
             // Manejo en caso de que la solicitud sea cancelada
             System.out.println("La solicitud fue cancelada.");
-        }
-    }
-    public void connectSocket(){
-        try{
-            socket = IO.socket("http://192.168.19.253:3789");
-            socket.connect();
-            System.out.println("VA");
-        }catch (Exception e){
-            System.out.println("NO VA");
-            System.out.println(e);
         }
     }
 }

@@ -6,8 +6,12 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
-public class AssetManager {
+import io.socket.client.IO;
+import io.socket.client.Socket;
 
+public class AssetManager {
+    public static Socket socket;
+    public static ResponseAuthenticator responseAuthenticator;
     public static Texture bgGameScreen;
     public static Texture peashooterTexture;
     public static TextureRegion[] peashooterDefaultMovement;
@@ -21,6 +25,15 @@ public class AssetManager {
     public static TextureRegion pitufuDefault;
     public static Skin skin;
     public static void load(){
+        try{
+            socket = IO.socket("http://192.168.19.253:3789");
+            socket.connect();
+            System.out.println("VA");
+        }catch (Exception e){
+            System.out.println("NO VA");
+            System.out.println(e);
+        }
+        responseAuthenticator = new ResponseAuthenticator();
         shinChanTexture = new Texture(Gdx.files.internal("shinchan.png"));
         pitufuTexture = new Texture(Gdx.files.internal("pitufo.png"));
         bgGameScreen = new Texture(Gdx.files.internal("bgGameScreen.png"));
